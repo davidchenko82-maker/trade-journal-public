@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trade Journal</title>
+  <style>
+    :root {
+      --bg: #0a0c10;
+      --panel: #12161d;
+      --panel-2: #171c24;
+      --muted: #8f99ab;
+      --text: #f4f7fb;
+      --line: rgba(255,255,255,0.08);
+      --accent: #ff4d8d;
+      --accent-2: #5be7c4;
+      --warning: #ffc857;
+      --danger: #ff6b6b;
+      --shadow: 0 20px 60px rgba(0,0,0,0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(255,77,141,0.18), transparent 30%),
+        radial-gradient(circle at top right, rgba(91,231,196,0.12), transparent 25%),
+        linear-gradient(180deg, #0a0c10 0%, #0f1319 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .wrap {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 56px;
+    }
+
+    .hero {
+      display: grid;
+      gap: 18px;
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(255,77,141,0.10), rgba(18,22,29,0.95) 38%, rgba(91,231,196,0.08));
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(30px, 5vw, 56px);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+    }
+
+    .hero p {
+      margin: 0;
+      color: #cfd7e4;
+      max-width: 760px;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .top-stats,
+    .channel-grid,
+    .trade-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .top-stats {
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      margin-bottom: 28px;
+    }
+
+    .stat,
+    .channel-card,
+    .trade-card {
+      background: linear-gradient(180deg, rgba(23,28,36,0.95), rgba(18,22,29,0.96));
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .stat {
+      padding: 18px 20px;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 10px;
+    }
+
+    .stat-value {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 0 0 16px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: -0.03em;
+    }
+
+    .section-title span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .channel-grid {
+      margin-bottom: 28px;
+    }
+
+    .channel-card {
+      overflow: hidden;
+    }
+
+    .channel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 20px 22px 14px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(90deg, rgba(255,77,141,0.14), rgba(255,77,141,0));
+    }
+
+    .channel-name {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .channel-rating {
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 700;
+      color: #111;
+      background: linear-gradient(135deg, var(--warning), #ffd97d);
+      white-space: nowrap;
+    }
+
+    .channel-meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      padding: 18px 22px 0;
+    }
+
+    .meta-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px 14px;
+    }
+
+    .meta-box .label {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 6px;
+    }
+
+    .meta-box .value {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .trade-grid {
+      padding: 18px 22px 22px;
+    }
+
+    .trade-card {
+      padding: 18px;
+      border-radius: 20px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015)),
+        linear-gradient(180deg, rgba(16,19,25,0.96), rgba(18,22,29,0.96));
+    }
+
+    .trade-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .trade-pair {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .badge {
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+      color: #dfe5ef;
+    }
+
+    .badge.short {
+      color: #ffd3db;
+      background: rgba(255,107,107,0.12);
+      border-color: rgba(255,107,107,0.28);
+    }
+
+    .badge.long {
+      color: #cffff1;
+      background: rgba(91,231,196,0.12);
+      border-color: rgba(91,231,196,0.28);
+    }
+
+    .trade-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .detail {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px 14px;
+    }
+
+    .detail .label {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 6px;
+    }
+
+    .detail .value {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .detail .value.positive {
+      color: var(--accent-2);
+    }
+
+    .detail .value.negative {
+      color: var(--danger);
+    }
+
+    .notes {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .note {
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.025);
+    }
+
+    .note strong {
+      display: block;
+      color: var(--accent);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    @media (max-width: 720px) {
+      .wrap {
+        width: min(100% - 20px, 1180px);
+        padding-top: 20px;
+      }
+
+      .hero,
+      .channel-head,
+      .channel-meta,
+      .trade-grid {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .channel-name,
+      .trade-pair {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="eyebrow">Trader Journal</div>
+      <h1>Темный дневник сигналов, где видно не только результат, но и качество идеи.</h1>
+      <p>
+        Здесь мы ведем статистику по каналам, монетам и вашим входам. Отдельно фиксируем чистоту сигнала,
+        дисциплину исполнения и отклонение от идеи — то есть насколько цена шла против сценария до того,
+        как идея начала отрабатывать.
+      </p>
+    </section>
+
+    <section class="top-stats">
+      <div class="stat">
+        <div class="stat-label">Всего сигналов</div>
+        <div class="stat-value">1</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Открытых сделок</div>
+        <div class="stat-value">1</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Каналов в работе</div>
+        <div class="stat-value">1</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Средняя чистота</div>
+        <div class="stat-value">8.0 / 10</div>
+      </div>
+    </section>
+
+    <div class="section-title">
+      <h2>Группировка по каналам</h2>
+      <span>Оценка канала отображается рядом с названием</span>
+    </div>
+
+    <section class="channel-grid">
+      <article class="channel-card">
+        <div class="channel-head">
+          <div class="channel-name">Мысли Эмилии</div>
+          <div class="channel-rating">Оценка канала: 8 / 10</div>
+        </div>
+
+        <div class="channel-meta">
+          <div class="meta-box">
+            <div class="label">Сигналов</div>
+            <div class="value">1</div>
+          </div>
+          <div class="meta-box">
+            <div class="label">Закрыто</div>
+            <div class="value">0</div>
+          </div>
+          <div class="meta-box">
+            <div class="label">Winrate</div>
+            <div class="value">—</div>
+          </div>
+          <div class="meta-box">
+            <div class="label">Среднее качество</div>
+            <div class="value">7 / 10</div>
+          </div>
+          <div class="meta-box">
+            <div class="label">Комментарий</div>
+            <div class="value" style="font-size:16px; line-height:1.35;">Сигнал понятный и аккуратный, итог по сделке пока не зафиксирован.</div>
+          </div>
+        </div>
+
+        <div class="trade-grid">
+          <article class="trade-card">
+            <div class="trade-top">
+              <div class="trade-pair">TAOUSDT</div>
+              <div class="badges">
+                <span class="badge short">SHORT</span>
+                <span class="badge">Сигнал: 10x</span>
+                <span class="badge">Ваше плечо: 50x</span>
+                <span class="badge">Статус: OPEN</span>
+              </div>
+            </div>
+
+            <div class="trade-details">
+              <div class="detail">
+                <div class="label">Дата сигнала</div>
+                <div class="value">18.04.2026</div>
+              </div>
+              <div class="detail">
+                <div class="label">Вход по сигналу</div>
+                <div class="value">258.38</div>
+              </div>
+              <div class="detail">
+                <div class="label">Ваш вход</div>
+                <div class="value">258.15</div>
+              </div>
+              <div class="detail">
+                <div class="label">Стоп</div>
+                <div class="value">281.09</div>
+              </div>
+              <div class="detail">
+                <div class="label">Результат сейчас</div>
+                <div class="value positive">+83.51 USDT</div>
+              </div>
+              <div class="detail">
+                <div class="label">Качество сигнала</div>
+                <div class="value">7 / 10</div>
+              </div>
+              <div class="detail">
+                <div class="label">Дисциплина</div>
+                <div class="value">8 / 10</div>
+              </div>
+              <div class="detail">
+                <div class="label">Отклонение от идеи</div>
+                <div class="value negative">3.37%</div>
+              </div>
+              <div class="detail">
+                <div class="label">Макс. ход против идеи</div>
+                <div class="value">267.09</div>
+              </div>
+            </div>
+
+            <div class="notes">
+              <div class="note">
+                <strong>Рыночный фон</strong>
+                BTC около 74.9k, доминация BTC около 57.3%, альты пока живут в BTC-led режиме. Для TAO шорт работает лучше,
+                пока цена не возвращает ключевое сопротивление.
+              </div>
+              <div class="note">
+                <strong>Комментарий к сделке</strong>
+                Канал дал читаемый шорт по TAO. Ваш фактический вход немного лучше сигнального. При этом ваше плечо выше,
+                чем в канале, поэтому риск исполнения по факту агрессивнее, чем идея источника.
+              </div>
+              <div class="note">
+                <strong>Отклонение от идеи</strong>
+                До реализации шорт-сценария цена сходила против идеи до <strong>267.09</strong>. Если считать от сигнального
+                входа <strong>258.38</strong>, отклонение составило <strong>3.37%</strong>. Это нормальное, но уже заметное
+                движение против позиции для высоковолатильного актива вроде TAO.
+              </div>
+              <div class="note">
+                <strong>Как считать отклонение от идеи</strong>
+                Для short мы смотрим, насколько высоко цена сначала сходила против входа, прежде чем идея начала
+                реализовываться. Пример: вход 10, цена ушла на 12, потом пошла вниз. Отклонение от идеи = 20%.
+              </div>
+            </div>
+          </article>
+        </div>
+      </article>
+    </section>
+  </div>
+</body>
+</html>
